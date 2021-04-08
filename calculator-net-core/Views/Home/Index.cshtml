@@ -1,8 +1,162 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Simple Calculator";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!--HTML and CSS Template from https://www.foolishdeveloper.com/2021/01/make-calculator-in-html.html-->
+<style>
+    /* add css code*/
+    body {
+        background-color: #0094ff;
+    }
+
+    table {
+        margin: auto;
+        background-color: #9dd2ea;
+        width: 295px;
+        height: 325px;
+        text-align: center;
+        margin-top: 50px;
+        border-radius: 4px;
+    }
+
+    #calculator {
+        position: absolute;
+        max-width: 80%;
+        left: 58%;
+        top: 10%;
+    }
+
+    input {
+        outline: 0;
+        position: relative;
+        left: 5px;
+        top: 5px;
+        border: 0;
+        color: #495069;
+        background-color: 4px;
+        width: 60px;
+        height: 50px;
+        float: left;
+        margin: 5px;
+        font-size: 20px;
+        box-shadow: 0 4px rgba(0,0,0,0.2);
+    }
+        /* add input hover effectg */
+        input:hover {
+            border: 0 solid #000;
+            color: #495069;
+            background-color: #8f5fda;
+            border-radius: 4px;
+            width: 60px;
+            height: 50px;
+            float: left;
+            margin: 5px;
+            font-size: 20px;
+            box-shadow: 0 4px #644294;
+        }
+
+    #answer {
+        width: 270px;
+        font-size: 26px;
+        text-align: center;
+        background-color: #f1faeb;
+        float: left;
+    }
+        /* answer hover effect */
+        #answer:hover {
+            width: 270px;
+            font-size: 26px;
+            text-align: center;
+            box-shadow: 0 4px rgba(0,0,0,0.2);
+            background-color: #f1faeb;
+        }
+
+    .operator {
+        background-color: #f1ff92;
+        position: relative;
+    }
+
+        /* hover */
+        .operator:hover {
+            background-color: #e7f56b;
+            box-shadow: 0 4px #b7c259;
+        }
+
+    #clear {
+        float: left;
+        position: relative;
+        display: block;
+        background-color: #ff9fa8;
+        margin-bottom: 15px;
+    }
+        /* hover */
+        #clear:hover {
+            float: left;
+            display: block;
+            background-color: #f297a0;
+            margin-bottom: 15px;
+            box-shadow: 0 4px #cc7f86;
+        }
+</style>
+
+
+<section id="calculator-sec">
+    <form name="calc">
+        <table>
+            <tr>
+                <td>
+                    <input type="text" size="16" id="answer" name="input" v-model="inputDisplay">
+                    <br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" name="one" value="1" v-on:click="inputDisplay+='1', inputString += '1'">
+                    <input type="button" name="two" value="2" v-on:click="inputDisplay+='2',inputString += '2'">
+                    <input type="button" name="three" value="3" v-on:click="inputDisplay+='3',inputString += '3'">
+                    <input type="button" class="operator" name="plus" value="+" v-on:click="inputDisplay+='+',inputString += 'plus'">
+                    <br>
+                    <input type="button" name="four" value="4" v-on:click="inputDisplay+='4', inputString += '4'">
+                    <input type="button" name="five" value="5" v-on:click="inputDisplay+='5',inputString += '5'">
+                    <input type="button" name="six" value="6" v-on:click="inputDisplay+='6',inputString += '6'">
+                    <input type="button" class="operator" name="minus" value="-" v-on:click="inputDisplay+='-',inputString += 'minus'">
+                    <br>
+                    <input type="button" name="seven" value="7" v-on:click="inputDisplay+='7',inputString += '7'">
+                    <input type="button" name="eight" value="8" v-on:click="inputDisplay+='8',inputString += '8'">
+                    <input type="button" name="nine" value="9" v-on:click="inputDisplay+='9',inputString += '9'">
+                    <input type="button" class="operator" name="times" value="*" v-on:click="inputDisplay+='*',inputString += 'multiply'">
+                    <br>
+                    <input type="button" id="clear" name="clear" value=" C " v-on:click="inputDisplay = '', inputString = '' ">
+                    <input type="button" name="zero" value="0" v-on:click="inputDisplay+='0',inputString += '0'">
+                    <input type="button" name="doit" value=" = " v-on:click="evaluate">
+                    <input type="button" class="operator" name="div" value="/" v-on:click="inputDisplay+='/',inputString += 'divide'">
+                    <br>
+                </td>
+            </tr>
+        </table>
+    </form>
+</section>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        let calculator = new Vue({
+            el: '#calculator-sec',
+            data: {
+                inputDisplay: "",
+                inputString: '',
+            },
+            methods: {
+                evaluate: function () {
+                    let that = this;
+                    $.get(`/evaluate/${that.inputString}`, function (data) {
+                        that.inputDisplay = data;
+                        that.inputString = data;
+                    });
+                }
+            }
+        });
+    </script>
+
+}
+
